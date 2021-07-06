@@ -3,7 +3,6 @@ const Discord = require('discord.js')
 const bot = new Commando.Client()
 const TOKEN = "NDkwMjE1OTg4MTM1MDY3NjY4.W5vzNw.7GG1Jv73qwUY7QJO3GxJGv-u6Eo"
 
-bot.registry.registerGroup('simple', 'Simple')
 bot.registry.registerGroup('fun', 'Fun')
 bot.registry.registerGroup('admin', 'Admin')
 bot.registry.registerCommandsIn(__dirname + '/commands')

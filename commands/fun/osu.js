@@ -7,7 +7,7 @@ class OsuCommand extends commando.Command
     constructor(client) {
         super(client, {
             name: 'osu',
-            group: 'simple',
+            group: 'fun',
             memberName: 'osu',
             description: "dax"
         });
