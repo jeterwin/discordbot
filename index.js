@@ -7,9 +7,6 @@ bot.aliases = new Discord.Collection();
 const fs = require("fs")
 const TOKEN = "NDkwMjE1OTg4MTM1MDY3NjY4.W5vzNw.7GG1Jv73qwUY7QJO3GxJGv-u6Eo"
 
-bot.registry.registerGroup('alias', 'Alias')
-bot.registry.registerCommandsIn(__dirname + '/commands')
-
 fs.readdir("./commands/", (err, files) => {
     if(err) console.log(err)
     let jsfile = files.filter(f => f.split(".").pop() === "js")
