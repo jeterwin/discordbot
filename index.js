@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const distube = require("distube")
-const bot = new Commando.Client()
+const bot = new Commando.Client({fetchAllMembers: true})
 bot.commands = new Discord.Collection()
 bot.aliases = new Discord.Collection();
 const fs = require("fs")
@@ -35,6 +35,17 @@ bot.on('ready', () => {
             url: 'https://www.twitch.tv/monstercat'
         }
     })
+})
+
+bot.on("guildCreate", guild => {
+    let embed = new Discord.MessageEmbed()
+    .setColor("#00FF00")
+    .setDescription("**Thanks for inviting me here!** 😊")
+    .addField("My name is `hinata` and `!` is my default prefix", "If you wish to change it, do `!prefix <prefix>`")
+    .setThumbnail(bot.user.displayAvatarURL({dynamic: false, size: 4096}))
+    .setFooter("Do !help to find more about me!")
+    .setTimestamp()
+    guild.systemChannel.send(embed)
 })
 
 

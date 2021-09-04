@@ -15,7 +15,6 @@ module.exports.run = async (bot, message, args) => {
     let embed = new Discord.MessageEmbed()
     .setTitle(`${message.author.username} is sending lots of kisses towards ${kissed.username}! ❤️`)
     .setImage(randomLink)
-
     .setColor("#ffc0cb")
     message.channel.send(embed)
 }

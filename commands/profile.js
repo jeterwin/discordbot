@@ -21,22 +21,36 @@ module.exports.run = async (bot, message, args) => {
         const context = canvas.getContext('2d');
         context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-        context.strokeStyle = '#0099ff';
-        context.strokeRect(0, 0, canvas.width, canvas.height);
+        const circle = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 70,
+        }
+const applyText = (canvas, text) => {
+	const context = canvas.getContext('2d');
+	let fontSize = 70;
 
-        context.font = '28px sans-serif';
-        context.fillStyle = '#ffffff';
-        context.fillText(`${message.author.username}`, canvas.width / 4, canvas.height / 1.6);
+	do {
+		context.font = `${fontSize -= 10}px sans-serif`;
+	} while (context.measureText(text).width > canvas.width / 1.65);
+
+	return context.font;
+}
+
+        context.font = applyText(canvas, `${message.author.username}!`);
+        context.fillStyle = '#171717';
+        context.fillText(`${message.author.username}`, canvas.width / 4, canvas.height / 1.25);
 
         context.beginPath();
-        context.arc(70, 70, 65, 0, Math.PI * 2, true);
+        context.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2, true);
         context.closePath();
         context.clip();
 
         const avatar = await Canvas.loadImage(message.author.displayAvatarURL({ format: 'jpg', size: 4096 }));
-        context.drawImage(avatar, 0, 0, 140, 140);
-
-
+        const aspect = avatar.height / avatar.width;
+        const hsx = circle.radius * Math.max(1.0 / aspect, 1.0);
+        const hsy = circle.radius * Math.max(aspect, 1.0);
+        context.drawImage(avatar,circle.x - hsx,circle.y - hsy,hsx * 2,hsy * 2);
 
         const attachment = new MessageAttachment(canvas.toBuffer(), 'profile-image.png');
 
