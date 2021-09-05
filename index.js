@@ -37,6 +37,8 @@ bot.on('ready', () => {
     })
 })
 
+
+/* On bot joins server */
 bot.on("guildCreate", guild => {
     let embed = new Discord.MessageEmbed()
     .setColor("#00FF00")
@@ -48,6 +50,96 @@ bot.on("guildCreate", guild => {
     guild.systemChannel.send(embed)
 })
 
+
+/* On user leave | kick */
+bot.on('guildMemberRemove', async member => {
+    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    if(!LoggingChannels[member.guild.id]) return;
+    const LogChannel = LoggingChannels[member.guild.id].channel
+    if(!bot.channels.cache.get(`${LogChannel}`)) return;
+
+	const fetchedLogs = await member.guild.fetchAuditLogs({
+		limit: 1,
+		type: 'MEMBER_KICK',
+	})
+
+	const kickLog = fetchedLogs.entries.first();
+
+	if (!kickLog) return console.log(`${member.user.tag} left the guild, most likely of their own will.`);
+
+	const { executor, target } = kickLog;
+
+    const KickedLog = new Discord.MessageEmbed()
+    .setColor('#dd5f53')
+    if (target.id === member.id) {
+        KickedLog.setDescription(`${member.user.tag} left the guild, kicked by ${executor.tag}`)
+        KickedLog.setTitle("User kicked from guild")
+	} else {
+        KickedLog.setDescription(`${member.user.tag} left the guild`)
+        KickedLog.setTitle("User left the guild")
+	}
+    KickedLog.setTimestamp()
+
+    bot.channels.cache.get(`${LogChannel}`).send(KickedLog)
+})
+
+
+/* Message log */
+bot.on("messageDelete", message => {
+    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    if(!LoggingChannels[message.guild.id]) return;
+    const LogChannel = LoggingChannels[message.guild.id].channel
+    if(!bot.channels.cache.get(`${LogChannel}`)) return;
+    const DeletedLog = new Discord.MessageEmbed()
+    .setTitle("Deleted Message")
+    .addField('Deleted by', `${message.author} - (${message.author.id})`)
+    .addField('In', message.channel)
+    .addField('Content', message.content)
+    .setColor('#dd5f53')
+    .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+    .setTimestamp()
+
+    bot.channels.cache.get(`${LogChannel}`).send(DeletedLog)
+})
+
+bot.on("messageDeleteBulk", messages => {
+    const msg = messages.first();
+    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    if(!LoggingChannels[msg.guild.id]) return;
+    const LogChannel = LoggingChannels[msg.guild.id].channel
+    if(!bot.channels.cache.get(`${LogChannel}`)) return;
+    const length = messages.array().length;
+    const DeletedLogs = new Discord.MessageEmbed()
+    .setTitle(`Deleted Messages`)
+    .addField('Deleted by', `${msg.author} - (${msg.author.id})`)
+    .addField('In', msg.channel)
+    .setDescription(messages.map(message => `[${message.author.tag}]: ${message.content}`))
+    .setFooter(`${length} latest shown`, msg.displayAvatarURL({size: 4096}))
+    .setColor('#dd5f53')
+    .setTimestamp();
+
+    bot.channels.cache.get(`${LogChannel}`).send(DeletedLogs);
+}) 
+
+
+/* Message Edited */
+bot.on("messageUpdate", async(oldMessage, newMessage) => {
+    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    if(!LoggingChannels[oldMessage.guild.id]) return;
+    const LogChannel = LoggingChannels[oldMessage.guild.id].channel
+    if(!bot.channels.cache.get(`${LogChannel}`)) return;
+    const EditedLog = new Discord.MessageEmbed()
+    .setTitle("Edited Message")
+    .addField('Edited by', `${oldMessage.author} - (${oldMessage.author.id})`)
+    .addField('In', oldMessage.channel)
+    .addField('Old Message', oldMessage.content)
+    .addField('New Message', newMessage.content)
+    .setColor('#33B42C')
+    .setThumbnail(oldMessage.author.displayAvatarURL({ dynamic: true }))
+    .setTimestamp()
+
+    await bot.channels.cache.get(`${LogChannel}`).send(EditedLog)
+})
 
 bot.on("message", (message) => {
     if(message.content.includes("!ping")) {

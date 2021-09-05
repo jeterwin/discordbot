@@ -8,8 +8,8 @@ module.exports.run = async (bot, message, args) => {
             const embed = new Discord.MessageEmbed()
             .setTitle(message.author.username)
             .setDescription("Nice profile picture!")
-            .setURL(message.author.displayAvatarURL({dynamic:false, size: 4096}))
-            .setImage(message.author.displayAvatarURL({dynamic:false, size: 4096}))
+            .setURL(message.author.displayAvatarURL({dynamic:true, size: 2048}))
+            .setImage(message.author.displayAvatarURL({dynamic:true, size: 2048}))
             .setTimestamp()
             message.channel.send(embed);
         }
@@ -18,8 +18,8 @@ module.exports.run = async (bot, message, args) => {
                 const embed = new Discord.MessageEmbed()
                 .setTitle(user.username)
                 .setDescription("Nice profile picture!")
-                .setURL(user.displayAvatarURL({dynamic:false, size: 4096}))
-                .setImage(user.displayAvatarURL({dynamic:false, size: 4096}))
+                .setURL(user.displayAvatarURL({dynamic:true, size: 2048}))
+                .setImage(user.displayAvatarURL({dynamic:true, size: 2048}))
                 .setTimestamp()
                 message.channel.send(embed);
         }

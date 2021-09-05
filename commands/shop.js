@@ -18,18 +18,19 @@ module.exports.run = async (bot, message, args) => {
         if(args == "")
         {
             const page1 = new Discord.MessageEmbed()
-            .setColor("RANDOM")
             .setTitle("Available backgrounds")
-            .addField("1. Japanese Garden", "Price: Free")
-            .addField("2. Purple", "Price: 50")
-            .addField("3. Green", "Price: 75")
-            .addField("4. Yellow", "Price: 125")
-            .addField("5. Pink", "Price: 175")
+            .setColor("RANDOM")
+            .addField("1. Japanese Garden 🖼️", "Price: Free")
+            .addField("2. Sidelines 🖼️", "Price: 50")
+            .addField("3. Abstract Art 🖼️", "Price: 75")
+            .addField("4. Blurred Mind 🖼️", "Price: 125")
+            .addField("5. Hidden Forest 🖼️", "Price: 200")
             .setTimestamp()
 
             const page2 = new Discord.MessageEmbed()
-            .setTitle("Pagina 2")
-
+            .setTitle("Available backgrounds")
+            .setColor("RANDOM")
+            .addField("6. Intertwine 🖼️", "Price: 300")
             const pages = [
                 page1,
                 page2
@@ -43,10 +44,10 @@ module.exports.run = async (bot, message, args) => {
         {
             try
             {
-                if(UserJSON[message.author.id].highestBG == args[1])  {
+                if(UserJSON[message.author.id].highestBG == args[1]) {
                     return message.channel.send("You already have that background!")
-                } else if(args[1] - UserJSON[message.autor.id].highestBG > 2) {
-                    return message.channel.send("You have to buy the background before that")
+                } else if(args[1] - UserJSON[message.author.id].highestBG > 1) {
+                    return message.channel.send("You have to buy the backgrounds before that one!")
                 }
                 else if(UserJSON[message.author.id].bal >= PricesJSON[`background-${args[1]}`].price)
                 {
