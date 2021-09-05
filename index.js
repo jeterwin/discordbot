@@ -53,7 +53,7 @@ bot.on("guildCreate", guild => {
 
 /* On user leave | kick */
 bot.on('guildMemberRemove', async member => {
-    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    var LoggingChannels = JSON.parse(fs.readFileSync("./serverLogs.json"))
     if(!LoggingChannels[member.guild.id]) return;
     const LogChannel = LoggingChannels[member.guild.id].channel
     if(!bot.channels.cache.get(`${LogChannel}`)) return;
@@ -86,7 +86,7 @@ bot.on('guildMemberRemove', async member => {
 
 /* Message log */
 bot.on("messageDelete", message => {
-    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    var LoggingChannels = JSON.parse(fs.readFileSync("./messageLogs.json"))
     if(!LoggingChannels[message.guild.id]) return;
     const LogChannel = LoggingChannels[message.guild.id].channel
     if(!bot.channels.cache.get(`${LogChannel}`)) return;
@@ -104,7 +104,7 @@ bot.on("messageDelete", message => {
 
 bot.on("messageDeleteBulk", messages => {
     const msg = messages.first();
-    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    var LoggingChannels = JSON.parse(fs.readFileSync("./messageLogs.json"))
     if(!LoggingChannels[msg.guild.id]) return;
     const LogChannel = LoggingChannels[msg.guild.id].channel
     if(!bot.channels.cache.get(`${LogChannel}`)) return;
@@ -124,7 +124,7 @@ bot.on("messageDeleteBulk", messages => {
 
 /* Message Edited */
 bot.on("messageUpdate", async(oldMessage, newMessage) => {
-    var LoggingChannels = JSON.parse(fs.readFileSync('./logs.json'))
+    var LoggingChannels = JSON.parse(fs.readFileSync("./messageLogs.json"))
     if(!LoggingChannels[oldMessage.guild.id]) return;
     const LogChannel = LoggingChannels[oldMessage.guild.id].channel
     if(!bot.channels.cache.get(`${LogChannel}`)) return;
