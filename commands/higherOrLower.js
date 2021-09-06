@@ -5,7 +5,7 @@ const fs = require("fs")
 module.exports.run = async (bot, message, args) => {
     if(args == "") return message.channel.send("How much are you betting?")
     let myNumber = Math.floor(Math.random() * 13) + 1
-    let botNumber = Math.floor(Math.random() * 12) + 1
+    let botNumber = Math.floor(Math.random() * 13) + 1
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
     if(!UserJSON[message.author.id])
     {

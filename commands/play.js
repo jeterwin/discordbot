@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args) => {
     if(!message.member.voice.channel) return message.channel.send("Intra intr-un vc gayule")
 
     const music = args.join(" ")
-    if(!music) return message.channel.send("Ce dedicatie vrei ma muie")
+    if(!music) return message.channel.send("What song do you want to play, you can play a song by url, song title or a whole playlist!")
 
     await bot.distube.play(message, music)
 }
