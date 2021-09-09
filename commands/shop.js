@@ -58,15 +58,15 @@ module.exports.run = async (bot, message, args) => {
                     message.channel.send(`Successfully bought background ${args[1]}`)
                 }
                 else
-                return message.channel.send("Nu iti permiti fundalu muistule")             
+                return message.channel.send("You do not have enough balance for that background!")             
             } 
             catch(err)
             {
-                return message.channel.send("Ba orbete, nu avem que in stoc")
+                return message.channel.send("That background does not exist yet")
             }
         }
         else
-        message.channel.send("Lmao nu mere asa bisnitare")
+        message.channel.send("Something went wrong!")
 }
 
 

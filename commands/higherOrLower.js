@@ -21,7 +21,7 @@ module.exports.run = async (bot, message, args) => {
         myNumber = Math.floor(Math.random() * 13) + 1;
     } while(myNumber === botNumber);
     
-    let filter = m => m.author.id === message.author.id
+let filter = m => m.author.id === message.author.id
     await message.channel.send(`Is the number you've got higher or lower than the bot's? \`HIGHER\` / \`LOWER\``).then(() => {
     message.channel.send(`Your number is ${myNumber}. The bot's number is somewhere between 1 and 13!`)
     message.channel.awaitMessages(filter, {

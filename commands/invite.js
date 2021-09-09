@@ -1,4 +1,5 @@
 const Discord = require("discord.js")
+const commando = require("discord.js-commando")
 
 module.exports.run = async (bot, message, args) => {
     let embed = new Discord.MessageEmbed()

@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args) => {
 
     return message.channel.send(page1)
   }).catch((err) => {
-    return message.channel.send("Could not find that manga!")
+    return message.channel.send("Could not find that manga, try again using a secondary name!")
   })
 }
 

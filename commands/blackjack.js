@@ -2,6 +2,7 @@ const Discord = require("discord.js")
 const malScraper = require('mal-scraper')
 const blackjack = require("discord-blackjack")
 const fs = require("fs")
+
 module.exports.run = async (bot, message, args) => {
     if(args == "") return message.channel.send("You have to bet something...")
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))

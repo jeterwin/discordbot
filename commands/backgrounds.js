@@ -36,5 +36,5 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: "backgrounds",
-    aliases: ["bg", "bgs"]
+    aliases: ["bg", "bgs", "background"]
 }

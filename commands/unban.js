@@ -1,29 +1,29 @@
 const Discord = require("discord.js")
 const commando = require("discord.js-commando")
 module.exports.run = async (bot, message, args) => {
-    let bannedUser = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(x => x.user.username.toLowerCase() === args.slice(0).join(" ") || x.user.username === args[0])
+    let toUnban = await bot.users.fetch(args[0])
     if (!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send("You need permissions!") 
     if (!message.guild.me.hasPermission("BAN_MEMBERS")) return message.channel.send("Bot need permissions!") 
-    if(!bannedUser)
+    if(!toUnban)
     {
         try {
         await message.reply("No user found");
         } catch(err) {
             console.log(err)
+            message.channel.send("The user is not banned!")
         }
         return;
     }
-
     const reason = args[1] || "There was no reason!";
     try {
-        await message.guild.member(bannedUser).ban({reason: reason})  
-        await message.channel.send(`Successfully banned ${bannedUser}`)      
+        message.guild.members.unban(toUnban, reason)
+        message.channel.send(`${toUnban} has been unbanned from the server!`)     
         } catch(err) {
             console.log(err)
     }
 }
 
 module.exports.help = {
-    name: "ban",
+    name: "unban",
     aliases: []
 }

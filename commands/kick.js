@@ -2,7 +2,7 @@ const Discord = require("discord.js")
 const commando = require("discord.js-commando")
 
 module.exports.run = async (bot, message, args) => {
-    let kickedUser = message.guild.member(message.mentions.users.first())
+    let kickedUser = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(x => x.user.username.toLowerCase() === args.slice(0).join(" ") || x.user.username === args[0])
     if(!message.guild.me.hasPermission("KICK_MEMBERS")) return;
     if(!message.member.hasPermission("KICK_MEMBERS")) return;
     if(!kickedUser)

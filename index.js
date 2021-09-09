@@ -4,8 +4,10 @@ const distube = require("distube")
 const bot = new Commando.Client({fetchAllMembers: true})
 bot.commands = new Discord.Collection()
 bot.aliases = new Discord.Collection();
+const { antijoin } = require("./Collection/index")
 const fs = require("fs")
-const TOKEN = "NDkwMjE1OTg4MTM1MDY3NjY4.W5vzNw.7GG1Jv73qwUY7QJO3GxJGv-u6Eo"
+
+module.exports = { antijoin }
 
 fs.readdir("./commands/", (err, files) => {
     if(err) console.log(err)
@@ -25,6 +27,8 @@ fs.readdir("./commands/", (err, files) => {
     })
 })
 
+/* When bot is on */
+
 bot.on('ready', () => {
     console.log("mhm")
     bot.user.setPresence({
@@ -36,6 +40,7 @@ bot.on('ready', () => {
         }
     })
 })
+
 
 
 /* On bot joins server */
@@ -141,20 +146,6 @@ bot.on("messageUpdate", async(oldMessage, newMessage) => {
     await bot.channels.cache.get(`${LogChannel}`).send(EditedLog)
 })
 
-bot.on("message", (message) => {
-    if(message.content.includes("!ping")) {
-
-          message.channel.send("Pinging...").then(m =>{
-              var ping = m.createdTimestamp - message.createdTimestamp;
-
-              var embed = new Discord.MessageEmbed()
-              .setAuthor(`🏓 Your ping is ${ping}ms`)
-              .setColor("Your Color")
-
-              m.edit(embed)
-          })
-      }
-})
 
 bot.on("message", async message => {
     let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"))
@@ -168,6 +159,48 @@ bot.on("message", async message => {
     let cmd = messageArray[0]
     let args = messageArray.slice(1)
     let command;
+    
+    if(message.content.includes(`${prefix}ping`)) {
+
+        message.channel.send("Pinging...").then(m =>{
+            var ping = m.createdTimestamp - message.createdTimestamp;
+
+            var embed = new Discord.MessageEmbed()
+            .setAuthor(`🏓 Your ping is ${ping}ms`)
+            .setColor("Your Color")
+
+            m.edit(embed)
+        })
+    }    
+    if(message.content.includes(`${prefix}setverificationlevel`)) {
+        if(!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("You need administrator permissions to change the verification level")
+        if(isNaN(messageArray[1])) return message.channel.send("You must enter a number between 0 and 4 (low - high)")
+        message.guild.setVerificationLevel(Number(messageArray[1]))
+        .then(updated => {
+            let embed = new Discord.MessageEmbed()
+            .setTitle(`Updated mode successfully ✅`)
+            .setDescription(`Updated guild verification level to ${message.guild.verificationLevel}`)
+            .setTimestamp()
+            .setColor('#00ff00')
+            message.channel.send(embed)
+        })
+        .catch(console.error);
+    }
+    if(message.content.includes(`${prefix}setcontentfilter`)) {
+        if(!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("You need administrator permissions to change the content filter level")
+        if(isNaN(messageArray[1])) return message.channel.send("You must enter a number between 0 and 3 (low - high)")
+        message.guild.setExplicitContentFilter(Number(messageArray[1]))
+        .then(updated => {
+            let embed = new Discord.MessageEmbed()
+            .setTitle(`Updated mode successfully ✅`)
+            .setDescription(`Updated guild content filter level to ${message.guild.explicitContentFilter}`)
+            .setTimestamp()
+            .setColor('#00ff00')
+            message.channel.send(embed)
+        })
+        .catch(console.error);
+    }
+    //.setExplicitContentFilter(explicitContentFilterreason)
     if(prefix == cmd[0] && cmd.slice(prefix.length) == "prefix" && messageArray[1] == undefined)
     {
         var embed = new Discord.MessageEmbed()
@@ -183,6 +216,17 @@ bot.on("message", async message => {
     }
     if(!command) return
     command.run(bot, message, args)
+})
+
+
+/* Antiraid module */
+bot.on('guildMemberAdd', async(member) => {
+    const getCollection = antijoin.get(member.guild.id)
+    if(!getCollection) return;
+    if(!getCollection.includes(member.user)) {
+    getCollection.push(member.user)        
+    }
+    member.kick({reason: "Antiraid was enabled"})
 })
 
 bot.distube = new distube(bot, { searchSongs: false, emitNewSongOnly: true })
@@ -212,4 +256,4 @@ bot.distube
         //message.channel.send(`An error encountered: ${e}`)
 })
 
-bot.login(TOKEN)
+bot.login(`NDkwMjE1OTg4MTM1MDY3NjY4.W5vzNw.7GG1Jv73qwUY7QJO3GxJGv-u6Eo`)

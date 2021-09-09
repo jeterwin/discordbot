@@ -31,14 +31,14 @@ const applyText = (canvas, text) => {
 	let fontSize = 70;
 
 	do {
-		context.font = `${fontSize -= 10}px sans-serif`;
+		context.font = `${fontSize -= 10}px Roboto`;
 	} while (context.measureText(text).width > canvas.width / 1.65);
 
 	return context.font;
 }
 
         context.font = applyText(canvas, `${message.author.username}!`);
-        context.fillStyle = '#171717';
+        context.fillStyle = '#ffffff';
         context.fillText(`${message.author.username}`, canvas.width / 4, canvas.height / 1.25);
 
         context.beginPath();

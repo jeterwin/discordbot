@@ -10,14 +10,13 @@ module.exports.run = async (bot, message, args) => {
         const page1 = new Discord.MessageEmbed()
         .setTitle(data.title)
         .setURL(data.url)
-        .setDescription(data.synopsis)        
-        .setImage(data.picture)
+        .setDescription(data.synopsis)
         .addField("Score: ", `${data.score} ⭐`)
         .addField("Genres: ", `${data.genres} 📙`)
         .addField("Number of episodes: ", `${data.episodes} 📅`)
         .addField("Type: ", `${data.type} 📺`)
         .setColor("#FFE194")
-
+        .setImage(data.picture)
 
         const page2 = new Discord.MessageEmbed()
         .setTitle("Characters")
@@ -35,10 +34,7 @@ module.exports.run = async (bot, message, args) => {
         const timeout = '100000'
         return pagination(message, pages, emoji, timeout)
     })
-    .catch((err) => {
-        console.log(err)
-        return message.channel.send("Could not find that manga, try again using a secondary name!")
-    })
+    .catch((err) => console.log(err))
 }
 
 module.exports.help = {
