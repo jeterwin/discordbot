@@ -149,11 +149,12 @@ bot.on("messageUpdate", async(oldMessage, newMessage) => {
 
 bot.on("message", async message => {
     let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"))
-    if(message.channel.type == "dm") return
+    if(message.channel.type == "dm") return;
     if(!prefixes[message.guild.id])
     prefixes[message.guild.id] = {
         prefixes: "!"
     }
+    fs.writeFileSync('./prefixes.json', JSON.stringify(prefixes))
     let prefix = prefixes[message.guild.id].prefixes
     let messageArray = message.content.split(" ")
     let cmd = messageArray[0]

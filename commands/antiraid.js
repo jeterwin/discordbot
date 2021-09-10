@@ -3,8 +3,8 @@ const commando = require("discord.js-commando")
 const { antijoin } = require("../Collection/index")
 
 module.exports.run = async (bot, message, args) => {
-    if(!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("You require admin permissions to activate antiraid mode")
-
+    if(!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("You need admin permissions to activate antiraid mode!")
+    if (!message.guild.me.hasPermission('ADMINISTRATOR')) return message.channel.send("Bot needs administrator permissions activate antiraid mode!") 
     const query = args[0].toLowerCase()
     if(!query) return message.reply("Correct usage: `!antiraid on | off | list`")
 

@@ -3,6 +3,8 @@ const commando = require("discord.js-commando")
 const ms = require("ms")
 
 module.exports.run = async (bot, message, args) => {
+    if(!message.member.hasPermission("MANAGE_ROLES")) return message.channel.send("You need permissions to manage roles in order to mute!") 
+    if(!message.guild.me.hasPermission("MANAGE_ROLES")) return message.channel.send("Bot needs permissions to manage roles in order to mutex") 
     let tomute = message.mentions.members.first() || message.guild.members.cache.get(args[0])
     if(!tomute) return message.reply("Couldn't find user")
     if(tomute.hasPermission("MANAGE_MESSAGES")) return message.reply("Can't mute them")
