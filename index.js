@@ -200,7 +200,6 @@ bot.on("message", async message => {
         })
         .catch(console.error);
     }
-    //.setExplicitContentFilter(explicitContentFilterreason)
     if(prefix == cmd[0] && cmd.slice(prefix.length) == "prefix" && messageArray[1] == undefined)
     {
         var embed = new Discord.MessageEmbed()

@@ -2,7 +2,7 @@ const Discord = require("discord.js")
 const commando = require("discord.js-commando")
 
 module.exports.run = async (bot, message, args) => {
-    let user = message.mentions.users.first();
+        let user = message.mentions.users.first();
         if(!user)
         {
             const embed = new Discord.MessageEmbed()

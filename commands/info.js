@@ -4,11 +4,6 @@ const fs = require("fs")
 
 module.exports.run = async (bot, message, args) => {
     const { guild, channel } = message
-    if(!message.mentions.users.first())
-    {
-        message.channel.send("Lu kare vrei sa ii furi portofelu bos?")
-        return;
-    }
     const user = message.mentions.users.first() || message.member.user
     const member = guild.members.cache.get(user.id)
 
