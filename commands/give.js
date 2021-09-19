@@ -18,14 +18,10 @@ module.exports.run = async (bot, message, args) => {
         }
     }
 
-    if(!user)
-    {
-        return message.channel.send("Coaie n-ai cui sa dai bani?")
-    }
-    else
-    {
-        if(!UserJSON[user.id])
-        {
+    if(!user) {
+        return message.channel.send("Correct usage: `!give <@user> <amount>`")
+    } else {
+        if(!UserJSON[user.id]) {
             UserJSON[user.id] = {
                 bal: 50,
                 background: 1,
@@ -35,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
         }
         if(args[1] > UserJSON[message.author.id].bal)
         {
-            return message.channel.send("C-am multi bani crezi tu ca ai lmao")
+            return message.channel.send("You don't have enough balance!")
         }
         else
         {

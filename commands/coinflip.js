@@ -15,32 +15,25 @@ module.exports.run = async (bot, message, args) => {
     }
     else
     {
-        if(args == "")
-        return message.channel.send("Cu ce pariezi coaie")
+        if(args == "" || isNaN(args))
+        return message.channel.send("Correct usage: `!coinflip <bet amount>`")
         else if(args > UserJSON[message.author.id].bal)
-        return message.channel.send("Restu platesti cu casa?")
-        else
-        {
-            UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - args
+        return message.channel.send("You don't have enough balance!")
+        else {
+            UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(args)
             fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
             var chance = Math.floor(Math.random() * 2) + 1
-            if(chance == 1)
-            {
+            if(chance == 1) {
                 const embed = new Discord.MessageEmbed()
                 .setColor("#00ff00")
-                embed.setDescription(`Ai castigat ${args * 2} 💸, acuma mai pariaza o data sa ii pierzi pe toti`)
+                embed.setDescription(`You won ${Math.ceil(args * 2)} 💸!`)
                 message.channel.send(embed);
-                UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + args * 2;
+                UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args * 2);
                 fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))  
-            }
-            if(chance == 2)
-            {
+            } else {
                 const embed = new Discord.MessageEmbed()
                 .setColor("#ff0000")
-                if(args > 1)
-                embed.setDescription(`Ai pierdut ${args} 💸 bemiai coaiele lmao`)
-                else
-                embed.setDescription(`Ai pierdut ${args} 💸 bemiai coaiele lmao`)
+                .setDescription(`You lost ${Math.ceil(args)} 💸, try again!`)
                 message.channel.send(embed);
             }
         }

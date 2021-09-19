@@ -38,15 +38,15 @@ module.exports.run = async (bot, message, args) => {
         .setFooter("Do !leaderboard global in order to see the richest players over all servers!")
         message.channel.send(embed)        
     }
-    else if(args == "global")
-    {
+    else if(args == "global"){
         var Sorted = Object.entries(UserJSON).sort((a,b) => b[1].bal - a[1].bal)
         if(Sorted.length > 10)
         Sorted = Sorted.slice(0, 10)
     
         var string = ""
         Sorted.forEach(user => {
-            string += `<@${user[0]}> => ${user[1].bal} coins 💸\n`
+            let userUsername = bot.users.cache.get(user[0])
+            string += `${userUsername.username}#${userUsername.discriminator} => ${user[1].bal} coins 💸\n`
         })
         var embed = new Discord.MessageEmbed()
         .setTitle("**Global Leaderboard**")

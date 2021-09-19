@@ -22,13 +22,13 @@ module.exports.run = async (bot, message, args) => {
     .setColor("#000000")
     .setTimestamp()
     message.channel.send(embed).then(msg => {
-      UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - args
+      UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(args)
       fs.writeFileSync("./bani.json", JSON.stringify(UserJSON)) 
       var ok = 1
       let filter = m => m.author.id === message.author.id
       message.channel.awaitMessages(filter, {
         max: 1,
-        time: 60000
+        time: 120000
       }).then(message => {
         message = message.first()
         if(message.content.toLowerCase() == "stop")
@@ -41,7 +41,7 @@ module.exports.run = async (bot, message, args) => {
           .setFooter(`${message.author.username} please refrain from sending other messages while the crash is ongoing, otherwise 'stop' won't work`)
           msg.edit(embed3)
           ok = 0
-          UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.floor(args * multiplier)
+          UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args * multiplier)
           fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
         }
       })

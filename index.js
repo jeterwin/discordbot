@@ -6,6 +6,9 @@ bot.commands = new Discord.Collection()
 bot.aliases = new Discord.Collection();
 const { antijoin } = require("./Collection/index")
 const fs = require("fs")
+var xp = JSON.parse(fs.readFileSync("./xp.json"))
+let cooldown = new Set()
+let cdseconds = 60;
 
 module.exports = { antijoin }
 
@@ -146,6 +149,34 @@ bot.on("messageUpdate", async(oldMessage, newMessage) => {
     await bot.channels.cache.get(`${LogChannel}`).send(EditedLog)
 })
 
+/* XP */
+bot.on('message', message => {
+    let xpAdd = Math.floor(Math.random() * 7) + 8
+    if(!xp[message.author.id]) {
+        xp[message.author.id] = {
+            xp: 0,
+            level: 1
+        }
+    }
+
+    let curXP = xp[message.author.id].xp
+    let curLvl = xp[message.author.id].level
+    let nxtLvl = xp[message.author.id].level * 300
+    if(!cooldown.has(message.author.id))
+    xp[message.author.id].xp = curXP + xpAdd
+    if(nxtLvl <= xp[message.author.id].xp) {
+        xp[message.author.id].level = curLvl + 1
+    }
+    fs.writeFileSync("./xp.json", JSON.stringify(xp))
+
+    // Add xp cooldown 1 min
+    if(!cooldown.has(message.author.id))
+    cooldown.add(message.author.id)
+
+    setTimeout(() => {
+        cooldown.delete(message.author.id)
+    }, cdseconds * 1000);
+})
 
 bot.on("message", async message => {
     let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"))

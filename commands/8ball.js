@@ -3,7 +3,7 @@ const commando = require("discord.js-commando")
 
 module.exports.run = async (bot, message, args) => {
     if(args == "")
-            message.channel.send("tf u gon ask")
+            message.channel.send("And where is the question?")
             else
             {
                 const answers = [

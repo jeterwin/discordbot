@@ -4,8 +4,11 @@ const blackjack = require("discord-blackjack")
 const fs = require("fs")
 
 module.exports.run = async (bot, message, args) => {
-    if(args == "") return message.channel.send("You have to bet something...")
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
+    if(args == "" || isNaN(args))
+    return message.channel.send("Correct usage: `!blackjack <bet amount>`")
+    else if(args > UserJSON[message.author.id].bal)
+    return message.channel.send("You don't have enough balance!")
     let game = await blackjack(message, bot)
     if(!UserJSON[message.author.id])
     {
@@ -16,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
         }
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     }
-    UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - args
+    UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(args)
     fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     switch (game.result) {
       case 'Win': {
@@ -26,8 +29,8 @@ module.exports.run = async (bot, message, args) => {
         break;
       }
       case 'Tie': {
-        message.channel.send(`You got your ${args} 💸 back!`)
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + args
+        message.channel.send(`You got your ${Math.ceil(args)} 💸 back!`)
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args)
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
         break;          
       }
