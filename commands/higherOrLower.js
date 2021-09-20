@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const fs = require("fs")
 
 module.exports.run = async (bot, message, args) => {
-    if(args == "") return message.channel.send("How much are you betting?")
+    if(args == "") return message.channel.send("Correct usage: `!highorlow <bet amount>`")
     let myNumber = Math.floor(Math.random() * 13) + 1
     let botNumber = Math.floor(Math.random() * 13) + 1
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
@@ -22,8 +22,8 @@ module.exports.run = async (bot, message, args) => {
     } while(myNumber === botNumber);
     
 let filter = m => m.author.id === message.author.id
-    await message.channel.send(`Is the number you've got higher or lower than the bot's? \`HIGHER\` / \`LOWER\``).then(() => {
     message.channel.send(`Your number is ${myNumber}. The bot's number is somewhere between 1 and 13!`)
+    await message.channel.send(`Is the number you've got higher or lower than the bot's? \`HIGHER\` / \`LOWER\``).then(() => {
     message.channel.awaitMessages(filter, {
       max: 1,
       time: 20000,
@@ -34,10 +34,10 @@ let filter = m => m.author.id === message.author.id
       UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - args
       if (message.content.toLowerCase() == 'higher' && myNumber > botNumber) 
       {
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args * 1.5)
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.abs(Math.ceil(args * 1.5))
         var embed = new Discord.MessageEmbed()
         .addField(`You were correct!`, `My number was ${botNumber}`)
-        .addField(`You just won`, `${Math.ceil(args * 1.5)} 💸`)
+        .addField(`You just won`, `${Math.abs(Math.ceil(args * 1.5))} 💸`)
         message.channel.send(embed)
       } 
       else if (message.content.toLowerCase() == 'lower' && myNumber < botNumber) 
@@ -45,7 +45,7 @@ let filter = m => m.author.id === message.author.id
         UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args * 1.5)
         var embed = new Discord.MessageEmbed()
         .addField(`You were correct!`, `My number was ${botNumber}`)
-        .addField(`You just won`, `${Math.ceil(args * 1.5)} 💸`)
+        .addField(`You just won`, `${Math.abs(Math.ceil(args * 1.5))} 💸`)
         message.channel.send(embed)
       }
       else 

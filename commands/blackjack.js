@@ -19,18 +19,18 @@ module.exports.run = async (bot, message, args) => {
         }
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     }
-    UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(args)
+    UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.abs(Math.ceil(args))
     fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     switch (game.result) {
       case 'Win': {
-        message.channel.send(`You just won ${Math.ceil(args * 1.5)} 💸`)
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args * 1.5)
+        message.channel.send(`You just won ${Math.abs(Math.ceil(args * 1.5))} 💸`)
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.abs(Math.ceil(args * 1.5))
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
         break;
       }
       case 'Tie': {
-        message.channel.send(`You got your ${Math.ceil(args)} 💸 back!`)
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args)
+        message.channel.send(`You got your ${Math.abs(Math.ceil(args))} 💸 back!`)
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.abs(Math.ceil(args))
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
         break;          
       }

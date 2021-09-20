@@ -20,20 +20,20 @@ module.exports.run = async (bot, message, args) => {
         else if(args > UserJSON[message.author.id].bal)
         return message.channel.send("You don't have enough balance!")
         else {
-            UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(args)
+            UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.abs(Math.ceil(args))
             fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
             var chance = Math.floor(Math.random() * 2) + 1
             if(chance == 1) {
                 const embed = new Discord.MessageEmbed()
                 .setColor("#00ff00")
-                embed.setDescription(`You won ${Math.ceil(args * 2)} 💸!`)
+                embed.setDescription(`You won ${Math.abs(Math.ceil(args * 2))} 💸!`)
                 message.channel.send(embed);
-                UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args * 2);
+                UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.abs(Math.ceil(args * 2))
                 fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))  
             } else {
                 const embed = new Discord.MessageEmbed()
                 .setColor("#ff0000")
-                .setDescription(`You lost ${Math.ceil(args)} 💸, try again!`)
+                .setDescription(`You lost ${Math.abs(Math.ceil(args))} 💸, try again!`)
                 message.channel.send(embed);
             }
         }

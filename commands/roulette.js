@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args) => {
          if(args[1] > UserJSON[message.author.id].bal || isNaN(args[1])) return message.channel.send("You don't have enough balance!")
          const Table = new Roulette()
          Table.addBet('one', `${args[0]}`, `${args[1]}`);
-         UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.abs(args[1])
+         UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(Math.abs(args[1]))
          fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))  
          var i=1
          Table.startGame()

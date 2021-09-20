@@ -27,20 +27,20 @@ module.exports.run = async (bot, message, args) => {
         }
         else
         {
-            UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Number(args[1]);
+            UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.abs(Math.ceil(args[1]))
             fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
             var number = Math.floor(Math.random() * 12) + 1
             message.channel.send('Rolling the dice...🎲🎲').then(msg => {
             if(number == Number(args[0]))
             {
                 let embed = new Discord.MessageEmbed()
-                .setDescription(`It rolled on number ${number}! Congratulations, you just won ${Math.ceil(args[1] * 5)} 💸!`)
+                .setDescription(`It rolled on number ${number}! Congratulations, you just won ${Math.abs(Math.ceil(args[1] * 5))} 💸!`)
                 .setColor("RANDOM")
                 setTimeout(function()
                     { 
                         msg.edit(embed);
-                        message.channel.send(`You just won ${Math.ceil(args[1] * 5)} 💸!`)
-                        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(Number(args[1] * 5));
+                        message.channel.send(`You just won ${Math.abs(Math.ceil(args[1] * 5))} 💸!`)
+                        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.abs(Math.ceil(args[1] * 5))
                         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
                 }, 4000)
             }

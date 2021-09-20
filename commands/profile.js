@@ -7,6 +7,7 @@ const canvacord = require("canvacord");
 module.exports.run = async (bot, message, args) => {
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
     var xp = JSON.parse(fs.readFileSync('./xp.json'))
+    var collection = new Discord.Collection()
     if(!UserJSON[message.author.id])
     {
         UserJSON[message.author.id] = {
@@ -15,17 +16,40 @@ module.exports.run = async (bot, message, args) => {
             highestBG: 1
         }
     }
-        fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))   
-    
+        fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
+        
         const rank = new canvacord.Rank()
         .setAvatar(message.author.displayAvatarURL({dynamic: false, format: 'png', size: 4096}))
         .setCurrentXP(xp[message.author.id].xp)
-        .setRequiredXP(xp[message.author.id].level * 300)
+        .setRequiredXP(xp[message.author.id].level * 100)
         .setStatus(message.member.presence.status)
         .setProgressBar("#FFFFFF", "COLOR")
         .setUsername(message.author.username)
-        .setDiscriminator("0007")
-        .setBackground('IMAGE', `C:/Users/Erwin/Desktop/DiscordBot/backgrounds/${UserJSON[message.author.id].background}.png`)
+        .setDiscriminator(message.author.discriminator)
+        //.setBackground('IMAGE', `/home/runner/DiscordBot/backgrounds/${UserJSON[message.author.id].background}.png`)
+        .setLevel(xp[message.author.id].level)
+        
+        await Promise.all(
+            message.guild.members.cache.map(async(member) => {
+                const id = member.id
+                if(!xp[id])
+                return
+                const bal = xp[id].xp
+                return bal !== 0 ? collection.set(id, {
+                    id,
+                    bal,
+                })
+                : null
+            })
+        )
+        const data = collection.sort((a,b) => b.bal - a.bal).first(10)
+
+            data.map((v, i) => {
+                if(bot.users.cache.get(v.id).tag == message.author.tag)
+                rank.setRank(i+1)
+            })
+        
+
         rank.build()
         .then(data => {
             const attachment = new Discord.MessageAttachment(data, "RankCard.png");

@@ -37,7 +37,7 @@ bot.on('ready', () => {
     bot.user.setPresence({
         status: 'online',
         activity: {
-            name: 'with depression',
+            name: '!help for more',
             type: 'STREAMING',
             url: 'https://www.twitch.tv/monstercat'
         }
@@ -155,17 +155,26 @@ bot.on('message', message => {
     if(!xp[message.author.id]) {
         xp[message.author.id] = {
             xp: 0,
-            level: 1
+            level: 1,
+            on: 1
         }
     }
 
     let curXP = xp[message.author.id].xp
     let curLvl = xp[message.author.id].level
-    let nxtLvl = xp[message.author.id].level * 300
-    if(!cooldown.has(message.author.id))
+    let nxtLvl = xp[message.author.id].level * 100
+    if(!cooldown.has(message.author.id) && !message.author.bot && xp[message.author.id].on == 1)
     xp[message.author.id].xp = curXP + xpAdd
     if(nxtLvl <= xp[message.author.id].xp) {
         xp[message.author.id].level = curLvl + 1
+        xp[message.author.id].xp = 0;
+        const embed = new Discord.MessageEmbed()
+        .setTitle("Congratulations!")
+        .setDescription(`${message.author.username} just got up to level ${curLvl}!`)
+        .setImage(message.author.displayAvatarURL({dynamic: true, size: 4096}))
+        .setFooter(`${nxtLvl} xp until you level up!`)
+        .setColor("#cc6699")
+        message.channel.send(embed)
     }
     fs.writeFileSync("./xp.json", JSON.stringify(xp))
 
@@ -191,19 +200,32 @@ bot.on("message", async message => {
     let cmd = messageArray[0]
     let args = messageArray.slice(1)
     let command;
-    
-    if(message.content.includes(`${prefix}ping`)) {
 
-        message.channel.send("Pinging...").then(m =>{
-            var ping = m.createdTimestamp - message.createdTimestamp;
+    if(message.content.includes(`${prefix}xp off`)) {
+        if(!xp[message.author.id]) {
+            xp[message.author.id] = {
+                xp: 0,
+                level: 1,
+                on: 0
+            }
+        }
+        xp[message.author.id].on = 0
+        fs.writeFileSync("./xp.json", JSON.stringify(xp))
+        message.channel.send(`Successfully disabled xp system for ${message.author.username}`)
+    }
+    if(message.content.includes(`${prefix}xp on`)) {
+        if(!xp[message.author.id]) {
+            xp[message.author.id] = {
+                xp: 0,
+                level: 1,
+                on: 1
+            }
+        }
+        xp[message.author.id].on = 1
+        fs.writeFileSync("./xp.json", JSON.stringify(xp))
+        message.channel.send(`Successfully enabled xp system for ${message.author.username}`)
+    }
 
-            var embed = new Discord.MessageEmbed()
-            .setAuthor(`🏓 Your ping is ${ping}ms`)
-            .setColor("Your Color")
-
-            m.edit(embed)
-        })
-    }    
     if(message.content.includes(`${prefix}setverificationlevel`)) {
         if(!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("You need administrator permissions to change the verification level")
         if(isNaN(messageArray[1])) return message.channel.send("You must enter a number between 0 and 4 (low - high)")

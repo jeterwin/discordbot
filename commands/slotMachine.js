@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
     }
     else
     {
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Number(args[0]);
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(Math.abs(args[0]))
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
 
         const cherry = new SlotSymbol('cherry', {
@@ -77,9 +77,9 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(results.visualize());
         var embed = new Discord.MessageEmbed()
         .setColor("#ffff00")
-        .setDescription(`You have won ${Math.ceil(results.totalPoints)} 💸!`)
+        .setDescription(`You have won ${Math.ceil(Math.abs(results.totalPoints))} 💸!`)
         message.channel.send(embed)
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(results.totalPoints);
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(Math.abs(results.totalPoints))
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     }
 }

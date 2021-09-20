@@ -9,7 +9,8 @@ module.exports.run = async (bot, message, args) => {
             { name: '⚙️ Moderation: ', value: '● antiraid `<on | off | list>` \n ● ban `<@user>` \n ● unban `<@user>` \n ● info `<@user>` \n ● inv \n ● kick `<@user>` \n ● messagelog \n`<#channel>` \n  ● serverlog \n`<#channel>` \n ● setverificationlevel \n `<0-4>` \n ● setcontentfilter `<0-3>` \n ● purge \n ● clear \n ● slowmode `<time>` \n ● prefix \n ● tempmute \n`<@user> <time>`', inline: true },
             { name: '🎵 Music: ', value: '● play \n ● skip \n ● stop \n ● loop \n ● pause \n ● resume \n ● queue', inline: true },
             { name: '💟 Love: ', value: '● love `<@user>` \n ● hug `<@user>` \n ● kiss `<@user>` \n ● pat `<@user>` \n ● fuck `<@user>`', inline: true },
-            { name: '💢 Anime: ', value: '● anime `<name>` \n ● manga `<name>`', inline: true}
+            { name: '💢 Anime: ', value: '● anime `<name>` \n ● manga `<name>`', inline: true},
+            { name: '📈 XP System: ', value: '● xp `off` \n ● xp `on`', inline: true}
         )
         .setTimestamp()
         .setFooter("Requested", message.author.displayAvatarURL())

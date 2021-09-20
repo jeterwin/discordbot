@@ -1,7 +1,7 @@
 const discord = require("discord.js")
 const commando = require("discord.js-commando")
 const fs = require("fs")
-const talkedRecently = new Set();  
+const talkedRecently = new Set(); 
 
 module.exports.run = async (bot, message, args) => {
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
@@ -30,7 +30,7 @@ module.exports.run = async (bot, message, args) => {
         talkedRecently.add(message.author.id);
         setTimeout(() => {
           talkedRecently.delete(message.author.id);
-        }, 60000);
+        }, 86400000);
     }
 }
 module.exports.help = {
