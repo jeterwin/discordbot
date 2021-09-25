@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args) => {
     if(args == "" || isNaN(args)) return message.channel.send("Correct usage: `!crash <bet>`")
     if(args > UserJSON[message.author.id].bal) return message.channel.send("You don't have enough balance!")
     let multiplier = 1
-    let crashValue = Math.floor(Math.random() * 25) + 1
+    let crashValue = Math.floor(Math.random() * 5) + 1
     let embed = new Discord.MessageEmbed()
     .setTitle("Do `stop` in order to crash!")
     .addField("Multiplier:", `${multiplier.toFixed(2)}x`)
@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
         time: 120000
       }).then(message => {
         message = message.first()
-        if(message.content.toLowerCase() == "stop")
+        if(message.content.toLowerCase() == "stop" && ok == 1)
         {
           let embed3 = new Discord.MessageEmbed()
           .setTitle("Do `stop` in order to crash!")
@@ -47,8 +47,9 @@ module.exports.run = async (bot, message, args) => {
       })
         function myLoop() {
             setTimeout(function() {  
-
-              if (multiplier <= crashValue && ok == 1) {
+              console.log(multiplier.toFixed(1))
+              console.log(crashValue.toFixed(1))
+              if (multiplier.toFixed(1) < crashValue.toFixed(1) && ok == 1) {
                 multiplier = multiplier + 0.1;
                 let embed1 = new Discord.MessageEmbed()
                 .setTitle("Do `stop` in order to crash!")
@@ -57,9 +58,10 @@ module.exports.run = async (bot, message, args) => {
                 .setFooter(`${message.author.username} please refrain from sending other messages while the crash is ongoing, otherwise 'stop' won't work`)
                 msg.edit(embed1)          
                 myLoop();              
-              } else if(multiplier == crashValue) {
+              } else if(multiplier.toFixed(1) == crashValue.toFixed(1)) {
+                ok=0
                 let embed2 = new Discord.MessageEmbed()
-                .setTitle("Do `stop` in order to crash!")
+                .setTitle("Crashed!")
                 .setColor("#FF0000")
                 .addField("Crashed at:", `${multiplier.toFixed(2)}x`)
                 .setFooter(`${message.author.username} please refrain from sending other messages while the crash is ongoing, otherwise 'stop' won't work`)

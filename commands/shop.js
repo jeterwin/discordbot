@@ -22,8 +22,8 @@ module.exports.run = async (bot, message, args) => {
             .setColor("RANDOM")
             .addField("1. Japanese Garden 🖼️", "Price: Free")
             .addField("2. Sidelines 🖼️", "Price: 50")
-            .addField("3. Abstract Art 🖼️", "Price: 75")
-            .addField("4. Blurred Mind 🖼️", "Price: 125")
+            .addField("3. Talent Ransom 🖼️", "Price: 75")
+            .addField("4. Equilateral 🖼️", "Price: 125")
             .addField("5. Hidden Forest 🖼️", "Price: 200")
             .setTimestamp()
 

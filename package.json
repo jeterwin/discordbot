@@ -23,6 +23,7 @@
     "distube": "^2.8.18",
     "ffmpeg-static": "^4.4.0",
     "fontconfig": "^0.2.2",
+    "fortnite": "^4.3.2",
     "fs": "^0.0.1-security",
     "giphy-api": "^2.0.2",
     "jimp": "^0.16.1",
