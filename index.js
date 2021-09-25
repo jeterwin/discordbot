@@ -172,7 +172,6 @@ bot.on('message', message => {
         .setTitle("Congratulations!")
         .setDescription(`${message.author.username} just got up to level ${curLvl}!`)
         .setImage(message.author.displayAvatarURL({dynamic: true, size: 4096}))
-        .setFooter(`${nxtLvl} xp until you level up!`)
         .setColor("#cc6699")
         message.channel.send(embed)
     }

@@ -31,6 +31,8 @@ module.exports.run = async (bot, message, args) => {
             .setTitle("Available backgrounds")
             .setColor("RANDOM")
             .addField("6. Intertwine 🖼️", "Price: 300")
+            .addField("7. Color Splatter 🖼️", "Price: 650")
+            .addField("8. Grainy Floor 🖼️", "Price: 1000")
             const pages = [
                 page1,
                 page2
@@ -44,7 +46,7 @@ module.exports.run = async (bot, message, args) => {
         {
             try
             {
-                if(UserJSON[message.author.id].highestBG == args[1]) {
+                if(args[1] <= UserJSON[message.author.id].highestBG) {
                     return message.channel.send("You already have that background!")
                 } else if(args[1] - UserJSON[message.author.id].highestBG > 1) {
                     return message.channel.send("You have to buy the backgrounds before that one!")

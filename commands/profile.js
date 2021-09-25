@@ -8,6 +8,7 @@ module.exports.run = async (bot, message, args) => {
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
     var xp = JSON.parse(fs.readFileSync('./xp.json'))
     var collection = new Discord.Collection()
+    var members = message.guild.memberCount
     if(!UserJSON[message.author.id])
     {
         UserJSON[message.author.id] = {
@@ -26,7 +27,7 @@ module.exports.run = async (bot, message, args) => {
         .setProgressBar("#FFFFFF", "COLOR")
         .setUsername(message.author.username)
         .setDiscriminator(message.author.discriminator)
-        //.setBackground('IMAGE', `/home/runner/DiscordBot/backgrounds/${UserJSON[message.author.id].background}.png`)
+        .setBackground('IMAGE', `C:/Users/Erwin/Desktop/DiscordBot/backgrounds/${UserJSON[message.author.id].background}.png`)
         .setLevel(xp[message.author.id].level)
         
         await Promise.all(
@@ -34,16 +35,18 @@ module.exports.run = async (bot, message, args) => {
                 const id = member.id
                 if(!xp[id])
                 return
-                const bal = xp[id].xp
+                const bal = xp[id].level
+                const xpUser = xp[id].xp
                 return bal !== 0 ? collection.set(id, {
                     id,
                     bal,
+                    xpUser
                 })
                 : null
             })
         )
-        const data = collection.sort((a,b) => b.bal - a.bal).first(10)
-
+        var data = collection.sort((a,b) => b.bal - a.bal).first(members)
+        data = collection.sort((a,b) => b.xpUser - a.xpUser).first(members)
             data.map((v, i) => {
                 if(bot.users.cache.get(v.id).tag == message.author.tag)
                 rank.setRank(i+1)

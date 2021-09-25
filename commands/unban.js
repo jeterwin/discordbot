@@ -3,7 +3,6 @@ const commando = require("discord.js-commando")
 module.exports.run = async (bot, message, args) => {
     let toUnban = await bot.users.fetch(args[0])
     if (!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send("You need permissions to in order to unban members!") 
-    if (!message.guild.me.hasPermission("BAN_MEMBERS")) return message.channel.send("Bot needs permissions to in order to unban members!") 
     if(!toUnban)
     {
         try {

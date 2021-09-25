@@ -22,16 +22,37 @@ module.exports.run = async (bot, message, args) => {
         return message.channel.send("Nu iti permiti tu asa ceva")
     }
 
-    let embed = new Discord.MessageEmbed()
+    const page1 = new Discord.MessageEmbed()
     .setTitle("These are the backgrounds you currently own!")
     .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 4096}))
     .setColor("")
-    while(i <= UserJSON[message.author.id].highestBG)
+    const emoji = ["◀️", "▶️"]
+    const timeout = '100000'
+
+    while(i <= 5)
     {
-        embed.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
+        if(UserJSON[message.author.id].highestBG >= i)
+        page1.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
         i++;
     }
-    message.channel.send(embed)
+    if(UserJSON[message.author.id].highestBG > 5 && UserJSON[message.author.id].highestBG <= 10) {
+        const page2 = new Discord.MessageEmbed()
+        .setTitle("These are the backgrounds you currently own!")
+        .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 4096}))
+        .setColor("")
+
+        while(i <= UserJSON[message.author.id].highestBG) {
+            page2.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
+            i++;
+        }
+
+        const pages = [
+            page1,
+            page2
+        ]
+        return pagination(message, pages, emoji, timeout)
+    }
+    return message.channel.send(page1)
 }
 
 module.exports.help = {

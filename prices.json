@@ -1,1 +1,10 @@
-{"background-1": { "price": 0, "alt": "Japanese Garden"},"background-2": { "price": 50, "alt": "Sidelines"},"background-3": { "price": 75, "alt": "Abstract Art"},"background-4": { "price": 125, "alt": "Blurred Mind"},"background-5": { "price": 200, "alt": "Hidden Forest"},"background-6": { "price": 300, "alt": "Intertwine"}}
+{"background-1": { "price": 0, "alt": "Japanese Garden"},
+"background-2": { "price": 50, "alt": "Sidelines"},
+"background-3": { "price": 75, "alt": "Abstract Art"},
+"background-4": { "price": 125, "alt": "Blurred Mind"},
+"background-5": { "price": 200, "alt": "Hidden Forest"},
+"background-6": { "price": 300, "alt": "Intertwine"},
+"background-7": { "price": 650, "alt": "Color Splatter"},
+"background-8": { "price": 1000, "alt": "Grainy Floor"},
+"background-9": { "price": 1500, "alt": "Hell"}
+}
