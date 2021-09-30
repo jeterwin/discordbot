@@ -1,6 +1,7 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const distube = require("distube")
+const Canvacord = require("canvacord");
 const bot = new Commando.Client({fetchAllMembers: true})
 bot.commands = new Discord.Collection()
 bot.aliases = new Discord.Collection();
@@ -164,14 +165,14 @@ bot.on('message', message => {
     let curLvl = xp[message.author.id].level
     let nxtLvl = xp[message.author.id].level * 100
     if(!cooldown.has(message.author.id) && !message.author.bot && xp[message.author.id].on == 1)
-    xp[message.author.id].xp = curXP + xpAdd
+    xp[message.author.id].xp = xp[message.author.id].xp + xpAdd
     if(nxtLvl <= xp[message.author.id].xp) {
-        xp[message.author.id].level = curLvl + 1
+        xp[message.author.id].level = xp[message.author.id].level + 1
         xp[message.author.id].xp = 0;
         const embed = new Discord.MessageEmbed()
         .setTitle("Congratulations!")
         .setDescription(`${message.author.username} just got up to level ${curLvl}!`)
-        .setImage(message.author.displayAvatarURL({dynamic: true, size: 4096}))
+        .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 4096}))
         .setColor("#cc6699")
         message.channel.send(embed)
     }
@@ -199,7 +200,7 @@ bot.on("message", async message => {
     let cmd = messageArray[0]
     let args = messageArray.slice(1)
     let command;
-
+    
     if(message.content.includes(`${prefix}xp off`)) {
         if(!xp[message.author.id]) {
             xp[message.author.id] = {
@@ -270,6 +271,33 @@ bot.on("message", async message => {
     command.run(bot, message, args)
 })
 
+/* Welcomer */
+bot.on('guildMemberAdd', async(member) => {
+        var members = member.guild.memberCount
+        var welcomes = JSON.parse(fs.readFileSync('./welcome.json'))
+        if(!welcomes[member.guild.id]) return;
+        const welcomeChannel = welcomes[member.guild.id].channel
+        if(!bot.channels.cache.get(`${welcomeChannel}`)) return;
+
+        const welcome = new Canvacord.Welcomer()
+        .setUsername(`${member.user.username}`)
+        .setDiscriminator(`${member.user.discriminator}`)
+        .setMemberCount(members)
+        .setGuildName(`${member.guild.name}`)
+        .setAvatar(`https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=2048`)
+        // .setColor("border", "#4D5E94")
+        // this.setColor("username-box", "#4D5E94")
+        // .setColor("discriminator-box", "#4D5E94")
+        // this.setColor("message-box", "#4D5E94")
+        // this.setColor("title", "#4D5E94")
+        // this.setColor("avatar", "#4D5E94")
+        welcome.build()
+        .then(buffer => {
+            const welcomemsg = new Discord.MessageAttachment(buffer, "WelcomeCard.png");
+            bot.channels.cache.get(`${welcomeChannel}`).send(welcomemsg);
+        })
+})
+
 
 /* Antiraid module */
 bot.on('guildMemberAdd', async(member) => {
@@ -289,7 +317,6 @@ bot.distube
             .setTitle("Now Playing 🎵")  
             .setDescription(`\`${song.name}\` - \`${song.formattedDuration}\`\n**Requested by: ${song.user}**`)
             .setColor("#ffcc66")           
-            //message.channel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}`)
             message.channel.send(embed)   
     })
 bot.distube
@@ -299,13 +326,11 @@ bot.distube
         .setTitle("Now Playing 🎵")  
         .setDescription(`Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`)
         .setColor("#ffcc66")           
-        //message.channel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}`)
         message.channel.send(embed)  
     })
 bot.distube	
     .on('error', (message, e) => {
         console.error(e)
-        //message.channel.send(`An error encountered: ${e}`)
 })
 
 bot.login(`NDkwMjE1OTg4MTM1MDY3NjY4.W5vzNw.7GG1Jv73qwUY7QJO3GxJGv-u6Eo`)

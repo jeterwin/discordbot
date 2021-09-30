@@ -18,7 +18,6 @@ module.exports.run = async (bot, message, args) => {
         fs.writeFileSync('./messageLogs.json', JSON.stringify(LoggingChannels))
         message.channel.send('Successfully set message logging channel as `' + channel.name + '`')        
     }
-
 }
 
 

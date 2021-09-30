@@ -51,8 +51,6 @@ module.exports.run = async (bot, message, args) => {
                 if(bot.users.cache.get(v.id).tag == message.author.tag)
                 rank.setRank(i+1)
             })
-        
-
         rank.build()
         .then(data => {
             const attachment = new Discord.MessageAttachment(data, "RankCard.png");

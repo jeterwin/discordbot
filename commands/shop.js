@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args) => {
             const page1 = new Discord.MessageEmbed()
             .setTitle("Available backgrounds")
             .setColor("RANDOM")
-            .addField("1. Japanese Garden 🖼️", "Price: Free")
+            .addField("1. Purple 🖼️", "Price: Free")
             .addField("2. Sidelines 🖼️", "Price: 50")
             .addField("3. Talent Ransom 🖼️", "Price: 75")
             .addField("4. Equilateral 🖼️", "Price: 125")
