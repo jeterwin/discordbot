@@ -19,26 +19,26 @@ module.exports.run = async (bot, message, args) => {
             return message.channel.send(`Successfully set background ${args[1]}`)
         }
         else
-        return message.channel.send("Nu iti permiti tu asa ceva")
+        return message.channel.send("You don't own that background!")
     }
 
     const page1 = new Discord.MessageEmbed()
     .setTitle("These are the backgrounds you currently own!")
-    .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 4096}))
+    .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
     .setColor("")
     const emoji = ["◀️", "▶️"]
     const timeout = '100000'
 
     while(i <= 5)
     {
-        if(UserJSON[message.author.id].highestBG >= i)
+        if(i <= UserJSON[message.author.id].highestBG)
         page1.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
         i++;
     }
     if(UserJSON[message.author.id].highestBG > 5 && UserJSON[message.author.id].highestBG <= 10) {
         const page2 = new Discord.MessageEmbed()
         .setTitle("These are the backgrounds you currently own!")
-        .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 4096}))
+        .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
         .setColor("")
 
         while(i <= UserJSON[message.author.id].highestBG) {
@@ -49,6 +49,34 @@ module.exports.run = async (bot, message, args) => {
         const pages = [
             page1,
             page2
+        ]
+        return pagination(message, pages, emoji, timeout)
+    }
+    else if(UserJSON[message.author.id].highestBG > 10 && UserJSON[message.author.id].highestBG <= 15) {
+        const page2 = new Discord.MessageEmbed()
+        .setTitle("These are the backgrounds you currently own!")
+        .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
+        .setColor("")
+
+        while(i <= 10) {
+            page2.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
+            i++;
+        }
+
+        const page3 = new Discord.MessageEmbed()
+        .setTitle("These are the backgrounds you currently own!")
+        .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
+        .setColor("")
+
+        while(i <= UserJSON[message.author.id].highestBG) {
+            page3.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
+            i++;
+        }
+
+        const pages = [
+            page1,
+            page2,
+            page3
         ]
         return pagination(message, pages, emoji, timeout)
     }

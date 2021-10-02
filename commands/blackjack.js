@@ -1,5 +1,4 @@
 const Discord = require("discord.js")
-const malScraper = require('mal-scraper')
 const blackjack = require("discord-blackjack")
 const fs = require("fs")
 

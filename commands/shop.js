@@ -24,18 +24,26 @@ module.exports.run = async (bot, message, args) => {
             .addField("2. Sidelines 🖼️", "Price: 50")
             .addField("3. Talent Ransom 🖼️", "Price: 75")
             .addField("4. Equilateral 🖼️", "Price: 125")
-            .addField("5. Hidden Forest 🖼️", "Price: 200")
+            .addField("5. 3D 🖼️", "Price: 200")
             .setTimestamp()
 
             const page2 = new Discord.MessageEmbed()
             .setTitle("Available backgrounds")
             .setColor("RANDOM")
-            .addField("6. Intertwine 🖼️", "Price: 300")
+            .addField("6. Grainy Floor 🖼️", "Price: 300")
             .addField("7. Color Splatter 🖼️", "Price: 650")
-            .addField("8. Grainy Floor 🖼️", "Price: 1000")
+            .addField("8. Retro 90s 🖼️", "Price: 1000")
+            .addField("9. Black Sheets 🖼️", "Price: 1500")
+            .addField("10. Murasaki no inazuma 🖼️", "Price: 2250")
+            .setTimestamp()
+
+            const page3 = new Discord.MessageEmbed()
+            .addField("11. Metal Waves 🖼️", "Price: 2500")
+            .setTimestamp()
             const pages = [
                 page1,
-                page2
+                page2,
+                page3
             ]
             const emoji = ["◀️", "▶️"]
             const timeout = '100000'

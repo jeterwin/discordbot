@@ -5,6 +5,7 @@ const Canvacord = require("canvacord");
 const bot = new Commando.Client({fetchAllMembers: true})
 bot.commands = new Discord.Collection()
 bot.aliases = new Discord.Collection();
+bot.invites = {}
 const { antijoin } = require("./Collection/index")
 const fs = require("fs")
 var xp = JSON.parse(fs.readFileSync("./xp.json"))
@@ -43,11 +44,22 @@ bot.on('ready', () => {
             url: 'https://www.twitch.tv/monstercat'
         }
     })
+    bot.guilds.cache.each(guild => {
+        if (!guild.me.permissions.has('MANAGE_GUILD')) return//on bot start, fetch all guilds and fetch all invites to store
+        guild.fetchInvites().then(guildInvites => {
+            guildInvites.each(guildInvite => {
+                bot.invites[guildInvite.code] = guildInvite.uses
+            })
+        })
+    })
 })
 
-
+bot.on('inviteCreate', (invite) => { //if someone creates an invite while bot is running, update store
+    bot.invites[invite.code] = invite.uses
+})
 
 /* On bot joins server */
+
 bot.on("guildCreate", guild => {
     let embed = new Discord.MessageEmbed()
     .setColor("#00FF00")
@@ -279,21 +291,36 @@ bot.on('guildMemberAdd', async(member) => {
         const welcomeChannel = welcomes[member.guild.id].channel
         if(!bot.channels.cache.get(`${welcomeChannel}`)) return;
 
+        const channel = member.guild.channels.cache.get(`${welcomeChannel}`)
+        member.guild.fetchInvites().then(guildInvites => { //get all guild invites
+            guildInvites.each(invite => {
+                if(invite.uses != bot.invites[invite.code]) { //if it doesn't match what we stored:
+                    const embed = new Discord.MessageEmbed()
+                    .setDescription(`Welcome <@${member.user.id}> invited by <@${invite.inviter.id}>. <@${invite.inviter.id}>'s invite has been used ${invite.uses} times!`)
+                    .setColor("#FFA500")
+                    channel.send(embed)
+                    bot.invites[invite.code] = invite.uses
+                }
+            })
+        })
+        
         const welcome = new Canvacord.Welcomer()
         .setUsername(`${member.user.username}`)
         .setDiscriminator(`${member.user.discriminator}`)
         .setMemberCount(members)
         .setGuildName(`${member.guild.name}`)
         .setAvatar(`https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=2048`)
-        // .setColor("border", "#4D5E94")
-        // this.setColor("username-box", "#4D5E94")
-        // .setColor("discriminator-box", "#4D5E94")
-        // this.setColor("message-box", "#4D5E94")
-        // this.setColor("title", "#4D5E94")
-        // this.setColor("avatar", "#4D5E94")
+        .setColor("border", "#F4BB47")
+        .setColor("username-box", "#d26500")
+        .setColor("discriminator-box", "#d26500")
+        .setColor("message-box", "#d26500")
+        .setColor("title", "#F4BB47")
+        .setColor("title-border", "#A8511F")
+        .setColor("background", "#A8511F")
+        .setColor("avatar", "#FFFFFF")
         welcome.build()
         .then(buffer => {
-            const welcomemsg = new Discord.MessageAttachment(buffer, "WelcomeCard.png");
+            const welcomemsg = new Discord.MessageAttachment(buffer, "WelcomeCard.png")
             bot.channels.cache.get(`${welcomeChannel}`).send(welcomemsg);
         })
 })
