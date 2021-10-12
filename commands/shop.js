@@ -1,4 +1,3 @@
-const commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const pagination = require('discord.js-pagination')
 const fs = require("fs")
@@ -20,6 +19,7 @@ module.exports.run = async (bot, message, args) => {
             const page1 = new Discord.MessageEmbed()
             .setTitle("Available backgrounds")
             .setColor("RANDOM")
+            .setDescription("`!shop buy <bg number>`")
             .addField("1. Purple 🖼️", "Price: Free")
             .addField("2. Sidelines 🖼️", "Price: 50")
             .addField("3. Talent Ransom 🖼️", "Price: 75")
@@ -30,15 +30,21 @@ module.exports.run = async (bot, message, args) => {
             const page2 = new Discord.MessageEmbed()
             .setTitle("Available backgrounds")
             .setColor("RANDOM")
+            .setDescription("`!shop buy <bg number>`")
             .addField("6. Grainy Floor 🖼️", "Price: 300")
             .addField("7. Color Splatter 🖼️", "Price: 650")
             .addField("8. Retro 90s 🖼️", "Price: 1000")
             .addField("9. Black Sheets 🖼️", "Price: 1500")
-            .addField("10. Murasaki no inazuma 🖼️", "Price: 2250")
+            .addField("10. Metal Waves 🖼️", "Price: 2000")
             .setTimestamp()
 
             const page3 = new Discord.MessageEmbed()
-            .addField("11. Metal Waves 🖼️", "Price: 2500")
+            .setTitle("Available backgrounds")
+            .setColor("RANDOM")
+            .setDescription("`!shop buy <bg number>`")
+            .addField("11. Murasaki no inazuma 🖼️", "Price: 2500")
+            .addField("12. Anime 🖼️", "Price: 3000")
+            .addField("13. Cyberpunk 🖼️", "Price: 3500")
             .setTimestamp()
             const pages = [
                 page1,
@@ -55,7 +61,7 @@ module.exports.run = async (bot, message, args) => {
             try
             {
                 if(args[1] <= UserJSON[message.author.id].highestBG) {
-                    return message.channel.send("You already have that background!")
+                    return message.channel.send("You already have that item!")
                 } else if(args[1] - UserJSON[message.author.id].highestBG > 1) {
                     return message.channel.send("You have to buy the backgrounds before that one!")
                 }
@@ -65,10 +71,10 @@ module.exports.run = async (bot, message, args) => {
                     UserJSON[message.author.id].background = Number(args[1])
                     UserJSON[message.author.id].highestBG = Number(args[1])
                     fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
-                    message.channel.send(`Successfully bought background ${args[1]}`)
+                    message.channel.send(`Successfully bought item ${args[1]}`)
                 }
                 else
-                return message.channel.send("You do not have enough balance for that background!")             
+                return message.channel.send("You do not have enough balance for that item!")             
             } 
             catch(err)
             {

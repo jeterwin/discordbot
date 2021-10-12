@@ -8,15 +8,16 @@ module.exports.run = async (bot, message, args) => {
     if(!tomute) return message.reply("Couldn't find user")
     if(tomute.hasPermission("MANAGE_MESSAGES")) return message.reply("Can't mute them")
     let muterole = message.guild.roles.cache.find(role => role.name === "Muted")
-    if(muterole) {
+    if(!muterole) {
         try {
-            message.guild.roles.create({
+            await message.guild.roles.create({
                 data: {
                 name: "Muted",
                 color: "#000000",
                 permissions: []                
                 }
             })
+            muterole = message.guild.roles.cache.find(role => role.name === "Muted")
             message.guild.channels.cache.forEach(async (channel, id) => {
                 await channel.createOverwrite(muterole, {
                     SEND_MESSAGES: false,
@@ -30,24 +31,24 @@ module.exports.run = async (bot, message, args) => {
             console.log(e.stack)
         }
     }
-
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+    console.log(member)
     if (!member) 
       return message.channel.send('Please mention a user or provide a valid user ID');
     if (member === message.member)
-      return message.channel.send('You cannot mute yourself');
-    if (member === message.guild.me) return message.channel.send(message, 0, 'You cannot mute me');
+      return message.channel.send('You cannot mute yourself')
+    if (member === message.guild.me) return message.channel.send(message, 0, 'You cannot mute me')
     if (member.roles.highest.position >= message.member.roles.highest.position)
-      return message.channel.send('You cannot mute someone with an equal or higher role');
+      return message.channel.send('You cannot mute someone with an equal or higher role')
     if (!args[1])
-      return message.channel.send('Please enter a length of time of 14 days or less (1s/m/h/d)');
-    let time = ms(args[1]);
-    if (!time || time > 1209600000) // Cap at 14 days, larger than 24.8 days causes integer overflow
-      return message.channel.send('Please enter a length of time of 14 days or less (1s/m/h/d)');
+      return message.channel.send('Please enter a length of time of 14 days or less (1s/m/h/d)')
+    let time = ms(args[1])
+    if (!time || time > 1209600000)
+      return message.channel.send('Please enter a length of time of 14 days or less (1s/m/h/d)')
 
     let reason = args.slice(2).join(' ');
     if (!reason) reason = '`None Provided`';
-    if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
+    if (reason.length > 1024) reason = reason.slice(0, 1021) + '...'
 
     if (member.roles.cache.has(muterole))
       return message.channel.send('Provided member is already muted');

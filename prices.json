@@ -8,6 +8,7 @@
 "background-8": { "price": 1000, "alt": "Retro 90s"},
 "background-9": { "price": 1500, "alt": "Black Sheets"},
 "background-10": { "price": 2000, "alt": "Metal Waves"},
-"background-11": { "price": 2750, "alt": "Murasaki no inazuma"},
-"background-12": { "price": 1, "alt": "Anime"}
+"background-11": { "price": 2500, "alt": "Murasaki no inazuma"},
+"background-12": { "price": 3000, "alt": "Anime"},
+"background-13": { "price": 3500, "alt": "Cyberpunk"}
 }

@@ -25,7 +25,8 @@ module.exports.run = async (bot, message, args) => {
     const page1 = new Discord.MessageEmbed()
     .setTitle("These are the backgrounds you currently own!")
     .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
-    .setColor("")
+    .setDescription("`!bg set <bg number>`")
+    .setColor("#FFA500")
     const emoji = ["◀️", "▶️"]
     const timeout = '100000'
 
@@ -39,7 +40,8 @@ module.exports.run = async (bot, message, args) => {
         const page2 = new Discord.MessageEmbed()
         .setTitle("These are the backgrounds you currently own!")
         .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
-        .setColor("")
+        .setDescription("`!bg set <bg number>`")
+        .setColor("#FFB52E")
 
         while(i <= UserJSON[message.author.id].highestBG) {
             page2.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
@@ -56,7 +58,8 @@ module.exports.run = async (bot, message, args) => {
         const page2 = new Discord.MessageEmbed()
         .setTitle("These are the backgrounds you currently own!")
         .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
-        .setColor("")
+        .setDescription("`!bg set <bg number>`")
+        .setColor("#FFC55C")
 
         while(i <= 10) {
             page2.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)
@@ -66,7 +69,8 @@ module.exports.run = async (bot, message, args) => {
         const page3 = new Discord.MessageEmbed()
         .setTitle("These are the backgrounds you currently own!")
         .setThumbnail(message.author.displayAvatarURL({dynamic: false, size: 2048}))
-        .setColor("")
+        .setDescription("`!bg set <bg number>`")
+        .setColor("#FFD68A")
 
         while(i <= UserJSON[message.author.id].highestBG) {
             page3.addField(`Background ${i}`, `${PricesJSON[`background-${i}`].alt}`)

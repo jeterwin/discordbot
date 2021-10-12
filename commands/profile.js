@@ -1,6 +1,4 @@
-const commando = require('discord.js-commando')
 const Discord = require('discord.js')
-const Canvas = require('canvas');
 const fs = require("fs");
 const canvacord = require("canvacord");
 
@@ -18,7 +16,6 @@ module.exports.run = async (bot, message, args) => {
         }
     }
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
-        
         const rank = new canvacord.Rank()
         .setAvatar(message.author.displayAvatarURL({dynamic: false, format: 'png', size: 4096}))
         .setCurrentXP(xp[message.author.id].xp)
@@ -28,8 +25,16 @@ module.exports.run = async (bot, message, args) => {
         .setUsername(message.author.username)
         .setDiscriminator(message.author.discriminator)
         .setBackground('IMAGE', `C:/Users/Erwin/Desktop/DiscordBot/backgrounds/${UserJSON[message.author.id].background}.png`)
-        .setLevel(xp[message.author.id].level)
-        
+        .setLevel(xp[message.author.id].level, "LEVEL: ")
+
+        /* const jsonAsArray = Object.keys(xp).map(function (key) {
+            return xp[key];
+        })
+        jsonAsArray.sort((a,b) => b.xp - a.xp)
+        jsonAsArray.sort((a,b) => b.level - a.level)
+        for(let i = 0; i<jsonAsArray.length; i++)
+        if(jsonAsArray[i].xp == xp[message.author.id].xp && jsonAsArray[i].level == xp[message.author.id].level)
+            rank.setRank(i+1, "GLOBAL RANK") */
         await Promise.all(
             message.guild.members.cache.map(async(member) => {
                 const id = member.id
@@ -45,11 +50,11 @@ module.exports.run = async (bot, message, args) => {
                 : null
             })
         )
-        var data = collection.sort((a,b) => b.bal - a.bal).first(members)
-        data = collection.sort((a,b) => b.xpUser - a.xpUser).first(members)
+        var data = collection.sort((a,b) => b.xpUser - a.xpUser).first(members)
+        data = collection.sort((a,b) => b.bal - a.bal).first(members)
             data.map((v, i) => {
                 if(bot.users.cache.get(v.id).tag == message.author.tag)
-                rank.setRank(i+1)
+                rank.setRank(i+1, "SERVER RANK: ")
             })
         rank.build()
         .then(data => {

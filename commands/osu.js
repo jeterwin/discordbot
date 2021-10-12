@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args) => {
 
     await osuApi.getUserBest( { u: args }).then(scores => {
         const embedBest = new Discord.MessageEmbed()
-        .addField(`Your best score: `, scores[0].score, true)
+        .addField(`Your best score: `, scores[0].pp.toFixed(0) + " pp", true)
         .addField("On map: ", scores[0].beatmap.title, true)
         .addField(`With an accuracy of: `, scores[0].accuracy.toFixed(2) * 100 + "%", true)
         .setColor("#FF8080")
@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
     try {
       await osuApi.getUserRecent( { u: args } ).then(scores => {
         const embedRecent = new Discord.MessageEmbed()
-        .addField(`Your most recent score: `, scores[0].score, true)
+        .addField(`Your most recent score: `, scores[0].pp || scores[0].score, true)
         .addField("On map: ", scores[0].beatmap.title, true)
         .addField(`With an accuracy of: `, scores[0].accuracy.toFixed(2) * 100 + "%", true)
         .setColor("FFA6BE")

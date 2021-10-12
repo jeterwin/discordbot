@@ -45,7 +45,7 @@ bot.on('ready', () => {
         }
     })
     bot.guilds.cache.each(guild => {
-        if (!guild.me.permissions.has('MANAGE_GUILD')) return//on bot start, fetch all guilds and fetch all invites to store
+        if (!guild.me.permissions.has('MANAGE_GUILD')) return
         guild.fetchInvites().then(guildInvites => {
             guildInvites.each(guildInvite => {
                 bot.invites[guildInvite.code] = guildInvite.uses
@@ -54,7 +54,7 @@ bot.on('ready', () => {
     })
 })
 
-bot.on('inviteCreate', (invite) => { //if someone creates an invite while bot is running, update store
+bot.on('inviteCreate', (invite) => { 
     bot.invites[invite.code] = invite.uses
 })
 
@@ -163,8 +163,9 @@ bot.on("messageUpdate", async(oldMessage, newMessage) => {
 })
 
 /* XP */
-bot.on('message', message => {
-    let xpAdd = Math.floor(Math.random() * 7) + 8
+bot.on('message', async (message) => {
+    xp = JSON.parse(fs.readFileSync("./xp.json"))
+    let xpAdd = Math.floor(Math.random() * 15)
     if(!xp[message.author.id]) {
         xp[message.author.id] = {
             xp: 0,
@@ -173,30 +174,28 @@ bot.on('message', message => {
         }
     }
 
-    let curXP = xp[message.author.id].xp
     let curLvl = xp[message.author.id].level
     let nxtLvl = xp[message.author.id].level * 100
-    if(!cooldown.has(message.author.id) && !message.author.bot && xp[message.author.id].on == 1)
-    xp[message.author.id].xp = xp[message.author.id].xp + xpAdd
+    if(!cooldown.has(message.author.id) && !message.author.bot && xp[message.author.id].on == 1) {
+        xp[message.author.id].xp = xp[message.author.id].xp + xpAdd
+        cooldown.add(message.author.id)
+        setTimeout(() => {
+            cooldown.delete(message.author.id)
+        }, cdseconds * 1000);
+    }
+
     if(nxtLvl <= xp[message.author.id].xp) {
         xp[message.author.id].level = xp[message.author.id].level + 1
         xp[message.author.id].xp = 0;
         const embed = new Discord.MessageEmbed()
         .setTitle("Congratulations!")
-        .setDescription(`${message.author.username} just got up to level ${curLvl}!`)
+        .setDescription(`${message.author.username} just got up to level ${curLvl + 1}!`)
         .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 4096}))
         .setColor("#cc6699")
         message.channel.send(embed)
+
     }
     fs.writeFileSync("./xp.json", JSON.stringify(xp))
-
-    // Add xp cooldown 1 min
-    if(!cooldown.has(message.author.id))
-    cooldown.add(message.author.id)
-
-    setTimeout(() => {
-        cooldown.delete(message.author.id)
-    }, cdseconds * 1000);
 })
 
 bot.on("message", async message => {

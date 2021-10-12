@@ -5,7 +5,7 @@ const talkedRecently = new Set();
 
 module.exports.run = async (bot, message, args) => {
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
-    var money = Math.floor(Math.random() * 50) + 10;
+    var money = Math.floor(Math.random() * 75) + 50;
     if(!UserJSON[message.author.id])
     {
         UserJSON[message.author.id] = {
@@ -15,9 +15,9 @@ module.exports.run = async (bot, message, args) => {
         }
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     }
-    if(talkedRecently.has(message.author.id)) {
-        return message.channel.send(`${message.author.username}, you can use daily once every 24 hours!`);
-    } else {
+    if(talkedRecently.has(message.author.id))
+      return message.channel.send(`${message.author.username}, you can use work hourly!`)
+    else {
     const embed = new Discord.MessageEmbed()
     .setColor("RANDOM")
     .setDescription(`You just gained ${Number(money)} 💸!`)
@@ -31,7 +31,6 @@ module.exports.run = async (bot, message, args) => {
             }, 60000);
     }
 }
-
 
 module.exports.help = {
     name: "work",
