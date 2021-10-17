@@ -4,11 +4,6 @@ const fs = require("fs")
 
 module.exports.run = async (bot, message, args) => {
     var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
-    if(args == "" || isNaN(args))
-    return message.channel.send("Correct usage: `!blackjack <bet amount>`")
-    else if(args > UserJSON[message.author.id].bal)
-    return message.channel.send("You don't have enough balance!")
-    let game = await blackjack(message, bot)
     if(!UserJSON[message.author.id])
     {
         UserJSON[message.author.id] = {
@@ -18,20 +13,25 @@ module.exports.run = async (bot, message, args) => {
         }
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     }
-    UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.abs(Math.ceil(args))
+    if(args == "" || isNaN(args) || args[0] < 0)
+    return message.channel.send("Correct usage: `!blackjack <bet amount>`")
+    else if(args > UserJSON[message.author.id].bal)
+    return message.channel.send(`${message.author.username}, you don't have enough balance!`)
+    let game = await blackjack(message, bot)
+    UserJSON[message.author.id].bal = UserJSON[message.author.id].bal - Math.ceil(args)
     fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
     switch (game.result) {
       case 'Win': {
-        message.channel.send(`You just won ${Math.abs(Math.ceil(args * 1.5))} 💸`)
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.abs(Math.ceil(args * 1.5))
+        message.channel.send(`${message.author.username}, you just won ${Math.ceil(args * 1.5)} 💸`)
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args * 1.5)
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
         break;
       }
       case 'Tie': {
-        message.channel.send(`You got your ${Math.abs(Math.ceil(args))} 💸 back!`)
-        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.abs(Math.ceil(args))
+        message.channel.send(`${message.author.username}, you got your ${Math.ceil(args)} 💸 back!`)
+        UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Math.ceil(args)
         fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
-        break;          
+        break;
       }
       case 'ERROR':
         console.log("tf")

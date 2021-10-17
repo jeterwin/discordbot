@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
 const Discord = require('discord.js')
+const { MessageCollector } = require("discord.js")
 const distube = require("distube")
 const Canvacord = require("canvacord");
 const bot = new Commando.Client({fetchAllMembers: true})
@@ -8,9 +9,15 @@ bot.aliases = new Discord.Collection();
 bot.invites = {}
 const { antijoin } = require("./Collection/index")
 const fs = require("fs")
-var xp = JSON.parse(fs.readFileSync("./xp.json"))
 let cooldown = new Set()
+let moneyCooldown = new Set()
 let cdseconds = 60;
+let array = ["according", "benefit", "conference", "consider", "daughter", "decision", "democratic", "development", "employee",
+"environmental", "experience", "financial", "forward", "garden", "generation", "government", "however", "humanoid", "identify", "wife",
+"international", "knowledge", "management", "manager", "movement", "necessary", "newspaper", "particular", "participant",
+"opportunity", "organization", "participant", "particularly", "performance", "understand", "throughout", "themselves", "technology",
+"television", "cultural", "consider", "anime"]
+
 
 module.exports = { antijoin }
 
@@ -54,7 +61,7 @@ bot.on('ready', () => {
     })
 })
 
-bot.on('inviteCreate', (invite) => { 
+bot.on('inviteCreate', (invite) => {
     bot.invites[invite.code] = invite.uses
 })
 
@@ -135,16 +142,17 @@ bot.on("messageDeleteBulk", messages => {
     .addField('Deleted by', `${msg.author} - (${msg.author.id})`)
     .addField('In', msg.channel)
     .setDescription(messages.map(message => `[${message.author.tag}]: ${message.content}`))
-    .setFooter(`${length} latest shown`, msg.displayAvatarURL({size: 4096}))
+    .setFooter(`${length} latest shown`, `https://cdn.discordapp.com/avatars/${msg.author.id}/${msg.author.avatar}.webp?size=4096`)
     .setColor('#dd5f53')
     .setTimestamp();
 
     bot.channels.cache.get(`${LogChannel}`).send(DeletedLogs);
-}) 
+})
 
 
 /* Message Edited */
 bot.on("messageUpdate", async(oldMessage, newMessage) => {
+    if(!newMessage.content) return;
     var LoggingChannels = JSON.parse(fs.readFileSync("./messageLogs.json"))
     if(!LoggingChannels[oldMessage.guild.id]) return;
     const LogChannel = LoggingChannels[oldMessage.guild.id].channel
@@ -164,6 +172,7 @@ bot.on("messageUpdate", async(oldMessage, newMessage) => {
 
 /* XP */
 bot.on('message', async (message) => {
+    var xp = JSON.parse(fs.readFileSync("./xp.json"))
     xp = JSON.parse(fs.readFileSync("./xp.json"))
     let xpAdd = Math.floor(Math.random() * 15)
     if(!xp[message.author.id]) {
@@ -185,11 +194,12 @@ bot.on('message', async (message) => {
     }
 
     if(nxtLvl <= xp[message.author.id].xp) {
-        xp[message.author.id].level = xp[message.author.id].level + 1
+        xp[message.author.id].level = curLvl + 1
+        curLvl = xp[message.author.id].level
         xp[message.author.id].xp = 0;
         const embed = new Discord.MessageEmbed()
         .setTitle("Congratulations!")
-        .setDescription(`${message.author.username} just got up to level ${curLvl + 1}!`)
+        .setDescription(`${message.author.username} just got up to level ${curLvl}!`)
         .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 4096}))
         .setColor("#cc6699")
         message.channel.send(embed)
@@ -199,6 +209,40 @@ bot.on('message', async (message) => {
 })
 
 bot.on("message", async message => {
+
+    if(message.author.bot) return;
+    /*  Random money  */
+    let chance = Math.floor(Math.random() * 100) + 1
+    if(chance >= 1 && chance <= 8 && !moneyCooldown.has(message.guild.id))  {
+        moneyCooldown.add(message.guild.id)
+        setTimeout(() => {
+            moneyCooldown.delete(message.guild.id)
+        }, 60000);
+
+        let word = array[Math.floor(Math.random() * array.length)]
+        message.channel.send(`Whoever writes **${word}** first will get 200 💸. You only have 10 seconds to do so!`)
+        const filter = (m) => m.content.toLowerCase().startsWith(`${word}`)
+        const collector = new MessageCollector(message.channel, filter, {
+            time: 10000,
+        })
+        collector.on("collect", (msg) => {
+            message.channel.send(`Congrats ${message.author.username}, you got 200 💸 by writing the word first!`)
+            var UserJSON = JSON.parse(fs.readFileSync("./bani.json"))
+            if(!UserJSON[message.author.id])
+            {
+                UserJSON[message.author.id] = {
+                    bal: 50,
+                    background: 1,
+                    highestBG: 1
+                }
+                fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
+            }
+            UserJSON[msg.author.id].bal = UserJSON[msg.author.id].bal + 200
+            fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))
+            collector.stop()
+        })
+    }
+
     let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"))
     if(message.channel.type == "dm") return;
     if(!prefixes[message.guild.id])
@@ -211,7 +255,6 @@ bot.on("message", async message => {
     let cmd = messageArray[0]
     let args = messageArray.slice(1)
     let command;
-    
     if(message.content.includes(`${prefix}xp off`)) {
         if(!xp[message.author.id]) {
             xp[message.author.id] = {
@@ -273,10 +316,10 @@ bot.on("message", async message => {
         return message.channel.send(embed)
     }
     if(!message.content.startsWith(prefix)) return;
-    if(bot.commands.has(cmd.slice(prefix.length))) {
-        command = bot.commands.get(cmd.slice(prefix.length))
+    if(bot.commands.has(cmd.slice(prefix.length).toLowerCase())) {
+        command = bot.commands.get(cmd.slice(prefix.length).toLowerCase())
     } else {
-        command = bot.commands.get(bot.aliases.get(cmd.slice(prefix.length)))
+        command = bot.commands.get(bot.aliases.get(cmd.slice(prefix.length).toLowerCase()))
     }
     if(!command) return
     command.run(bot, message, args)
@@ -302,7 +345,7 @@ bot.on('guildMemberAdd', async(member) => {
                 }
             })
         })
-        
+
         const welcome = new Canvacord.Welcomer()
         .setUsername(`${member.user.username}`)
         .setDiscriminator(`${member.user.discriminator}`)
@@ -330,7 +373,7 @@ bot.on('guildMemberAdd', async(member) => {
     const getCollection = antijoin.get(member.guild.id)
     if(!getCollection) return;
     if(!getCollection.includes(member.user)) {
-    getCollection.push(member.user)        
+    getCollection.push(member.user)
     }
     member.kick({reason: "Antiraid was enabled"})
 })
@@ -339,22 +382,22 @@ bot.distube = new distube(bot, { searchSongs: false, emitNewSongOnly: true })
 bot.distube
     .on('playSong', (message, queue, song) =>
     {
-            var embed = new Discord.MessageEmbed()  
-            .setTitle("Now Playing 🎵")  
+            var embed = new Discord.MessageEmbed()
+            .setTitle("Now Playing 🎵")
             .setDescription(`\`${song.name}\` - \`${song.formattedDuration}\`\n**Requested by: ${song.user}**`)
-            .setColor("#ffcc66")           
-            message.channel.send(embed)   
+            .setColor("#ffcc66")
+            message.channel.send(embed)
     })
 bot.distube
     .on('addSong', (message, queue, song) =>
     {
         var embed = new Discord.MessageEmbed()
-        .setTitle("Now Playing 🎵")  
+        .setTitle("Now Playing 🎵")
         .setDescription(`Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`)
-        .setColor("#ffcc66")           
-        message.channel.send(embed)  
+        .setColor("#ffcc66")
+        message.channel.send(embed)
     })
-bot.distube	
+bot.distube
     .on('error', (message, e) => {
         console.error(e)
 })

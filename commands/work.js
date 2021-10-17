@@ -1,4 +1,3 @@
-const commando = require('discord.js-commando')
 const Discord = require('discord.js')
 const fs = require("fs")
 const talkedRecently = new Set();
@@ -20,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
     else {
     const embed = new Discord.MessageEmbed()
     .setColor("RANDOM")
-    .setDescription(`You just gained ${Number(money)} 💸!`)
+    .setDescription(`${message.author.username}, you just gained ${Number(money)} 💸!`)
     message.channel.send(embed)
     UserJSON[message.author.id].bal = UserJSON[message.author.id].bal + Number(money)
     fs.writeFileSync("./bani.json", JSON.stringify(UserJSON))

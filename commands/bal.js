@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
             }
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription(`You currently have ${UserJSON[message.author.id].bal} 💸`)
+                .setDescription(`${message.author.username}, you currently have ${UserJSON[message.author.id].bal} 💸`)
                 message.channel.send(embed)
         }
         else

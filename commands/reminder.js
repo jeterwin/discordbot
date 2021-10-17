@@ -11,7 +11,7 @@ module.exports.run = async (bot, message, args) => {
     message.channel.send(`${message.author}, successfully set a reminder!`)
 
     setTimeout(() => {
-        message.channel.send(`**Reminder** ${message.author}: ${args.slice(1).join(" ")}`)
+        message.channel.send(`**⏰ Reminder** ${message.author}: ${args.slice(1).join(" ")}`)
     }, time);
 }
 

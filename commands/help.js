@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args) => {
         .setFooter("Requested", message.author.displayAvatarURL())
         .setTimestamp()
         .addFields(
-            { name: '💸 Economy: ', value: '● bal `<@user>` \n ● backgrounds \n ● background set `<bg number>` \n ● crash `<bet amount>` \n ● daily \n ● give `<@user> <amount>` \n ● leaderboard \n ● profile \n ● shop \n ● shop buy <item> \n ● work', inline: true },
+            { name: '💸 Economy: ', value: '● bal `<@user>` \n ● backgrounds \n ● background set `<bg number>` \n ● crash `<bet amount>` \n crate \n ● crate open `<common | rare | legendary>`\n ● daily \n ● inventory \n ● give `<@user> <amount>` \n ● leaderboard \n ● profile \n ● shop \n ● shop buy <item> \n ● steal <@user> \n ● work', inline: true },
         )
 
         const page3 = new Discord.MessageEmbed()
@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args) => {
         .setFooter("Requested", message.author.displayAvatarURL())
         .setTimestamp()
         .addFields(
-            { name: '⚙️ Moderation: ', value: '● antiraid `<on | off | list>` \n ● ban `<@user>` \n ● unban `<@user>` \n ● info `<@user>` \n ● inv \n ● kick `<@user>` \n ● messagelog \n`<#channel>` \n  ● serverlog \n`<#channel>` \n ● setverificationlevel \n `<0-4>` \n ● setcontentfilter `<0-3>` \n ● purge \n ● clear \n ● slowmode `<time>` \n ● prefix \n ● tempmute \n`<@user> <time>`', inline: true },
+            { name: '⚙️ Moderation: ', value: '● antiraid `<on | off | list>` \n ● ban `<@user>` \n ● unban `<@user>` \n ● info `<@user>` \n ● invite \n ● kick `<@user>` \n ● messagelog \n`<#channel>` \n  ● serverlog \n`<#channel>` \n ● setverificationlevel \n `<0-4>` \n ● setcontentfilter `<0-3>` \n ● purge \n ● clear \n ● slowmode `<time>` \n ● prefix \n ● tempmute \n`<@user> <time> \n ● welcomer`', inline: true },
         )
         const page4 = new Discord.MessageEmbed()
         .setColor("#00ff00")
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
         .addFields(
             { name: '📈 XP System: ', value: '● xp `off` \n ● xp `on`', inline: true}
         )
-        
+
         const pages = [
             page1,
             page2,

@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args) => {
         .setProgressBar("#FFFFFF", "COLOR")
         .setUsername(message.author.username)
         .setDiscriminator(message.author.discriminator)
-        .setBackground('IMAGE', `C:/Users/Erwin/Desktop/DiscordBot/backgrounds/${UserJSON[message.author.id].background}.png`)
+        //.setBackground('IMAGE', `C:/Users/Erwin/Desktop/DiscordBot/backgrounds/${UserJSON[message.author.id].background}.png`)
         .setLevel(xp[message.author.id].level, "LEVEL: ")
 
         /* const jsonAsArray = Object.keys(xp).map(function (key) {
